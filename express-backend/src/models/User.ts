@@ -7,6 +7,7 @@ export interface IUser extends Document {
   role: "user" | "admin";
   address?: string;
   createdAt: Date;
+  mobile: string;
 }
 
 const UserSchema = new Schema<IUser>(
@@ -15,6 +16,12 @@ const UserSchema = new Schema<IUser>(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     address: { type: String },
+    mobile: {
+      type: String,
+      required: true,
+      unique: true,
+      match: [/^[6-9]\d{9}$/, "Please enter a valid Indian mobile number"],
+    },
     role: { type: String, enum: ["user", "admin"], default: "user" },
   },
   { timestamps: true }
