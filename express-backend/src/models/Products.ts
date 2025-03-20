@@ -5,6 +5,7 @@ interface IProduct extends Document {
   description: string;
   price: number;
   discountPrice?: number; // Optional discount
+  isFetaured?:boolean;
   category: mongoose.Types.ObjectId; // Reference to category
   brand?: string;
   images: string[]; // Multiple image URLs
@@ -35,6 +36,7 @@ const ProductSchema = new Schema<IProduct>(
     stock: { type: Number, required: true },
     sizes: { type: [String] },
     colors: { type: [String] },
+    isFetaured: {type:Boolean , default:false},
     ratings: [
       {
         user: { type: Schema.Types.ObjectId, ref: "User" },

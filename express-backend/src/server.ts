@@ -26,6 +26,5 @@ app.listen(PORT, () => {
 });
 
 
-const version = '1.0.1'
 
-app.use("/api/"+version, GlobalRouter);
+app.use("/api/", GlobalRouter);
