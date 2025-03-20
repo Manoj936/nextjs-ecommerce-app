@@ -1,24 +1,25 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-interface IProduct extends Document {
+interface IProduct {
   name: string;
   description: string;
   price: number;
-  discountPrice?: number; // Optional discount
-  isFetaured?:boolean;
-  category: mongoose.Types.ObjectId; // Reference to category
-  brand?: string;
-  images: string[]; // Multiple image URLs
-  deleteFlag?: boolean ;
+  discountPrice?: number;
+  isFeatured?: boolean;
+  category: mongoose.Types.ObjectId;
+  brand: mongoose.Types.ObjectId;
+  model: mongoose.Types.ObjectId;
+  images: string[];
   stock: number;
-  sizes?: string[]; // Optional (e.g., "S", "M", "L")
-  colors?: string[]; // Optional (e.g., "red", "blue")
+  sizes?: string[];
+  colors?: string[];
+  deleteFlag?: boolean;
   ratings: {
     user: mongoose.Types.ObjectId;
     rating: number;
     comment?: string;
   }[];
-  totalRatings?: number; // Aggregate rating
+  totalRatings?: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -30,13 +31,14 @@ const ProductSchema = new Schema<IProduct>(
     price: { type: Number, required: true },
     discountPrice: { type: Number },
     category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
-    brand: { type: String },
-    deleteFlag: { type: Boolean, default: false }, // Soft delete flag
+    brand: { type: Schema.Types.ObjectId, ref: "Brand", required: true },
+    model: { type: Schema.Types.ObjectId, ref: "Model", required: true },
     images: { type: [String], required: true },
-    stock: { type: Number, required: true },
+    stock: { type: Number, required: true, min: 0 },
     sizes: { type: [String] },
     colors: { type: [String] },
-    isFetaured: {type:Boolean , default:false},
+    isFeatured: { type: Boolean, default: false },
+    deleteFlag: { type: Boolean, default: false },
     ratings: [
       {
         user: { type: Schema.Types.ObjectId, ref: "User" },
@@ -49,6 +51,4 @@ const ProductSchema = new Schema<IProduct>(
   { timestamps: true }
 );
 
-const Product = mongoose.model<IProduct>("Product", ProductSchema);
-
-export default Product;
+export default mongoose.model<IProduct>("Product", ProductSchema);
